@@ -39,21 +39,6 @@ class xmlmagic{
 	//variables de los menus///////////////////////////////////////////////////
 	private $lcabecera,$hcabecera,$lmenu,$hmenu,$nmenu,$forecabecera,$foremenu;
 	///////////////////////////////////////////////////////////////////////////
-	///Condition 1 – Presence of a static member variable
-	private static $_instance = null;
-	
-	///Condition 2 – Locked down the constructor
-	private function __construct() { } //Prevent any oustide instantiation of this class
-	
-	///Condition 3 – Prevent any object or instance of that class to be cloned
-	private function __clone() { } //Prevent any copy of this object
-	
-	///Condition 4 – Have a single globally accessible static method
-	public static function getInstance(){
-		if( !is_object(self::$_instance) ) //or if( is_null(self::$_instance) ) or if( self::$_instance == null )
-		self::$_instance = new xmlmagic();
-		return self::$_instance;
-	}
 	//IMPRIMIR EN UTF8
 	function echoUtf8($cadena){
 		$cadena=utf8_decode($cadena);
@@ -79,7 +64,7 @@ class xmlmagic{
 	function MkClass($class){
 		$nodepal=$this->getMainNode();
 		$cant_clases=$this->cant_clases;
-
+		
 		if($this->xmldir!=''){
 			$this->clases[$nodepal][$cant_clases]=$class;
 			$this->cant_clases++;
@@ -97,7 +82,7 @@ class xmlmagic{
 	function setClase($class){
 		$nodepal=$this->getMainNode();
 		$cant_clases=$this->cant_clases;
-
+		
 		if($this->xmldir!=''){
 			$this->clases[$nodepal][$cant_clases]=$class;
 			$this->cant_clases++;
@@ -108,7 +93,7 @@ class xmlmagic{
 			return -1;
 		}
 	}
-
+	
 	//CREA el NODO PRINCIPAL de todas las clases
 	function setMainNode($nombre){
 		$this->nodeppal=$nombre;
@@ -138,20 +123,20 @@ class xmlmagic{
 		}
 		return 0;
 	}
-
+	
 	//ESTABLECE EL VALOR DE UN NODO X
 	function setValSubNode($nombre,$valor){
 		$clase=$this->nmclass;
 		$this->nodos[$clase][$nombre]=$valor;
 		$this->anode=$nombre;
 		return 0;
-	}
+	}	
 	//OBTIENE EL VALOR DEL ULTIMO NODO CREADO
 	function getValNode(){
 		$clase=$this->nmclass;
 		$node=$this->anode;
 		$valor=$this->nodos[$clase][$node];
-
+		
 		if($valor!=''){
 			return $valor;
 		}
@@ -164,7 +149,7 @@ class xmlmagic{
 		$nodepal=$this->getMainNode();
 		$cant_clases=$this->cant_clases;
 		$valor=$this->clases[$nodepal][$cant_clases];
-
+		
 		if($valor!=''){
 			return $valor;
 		}
@@ -175,8 +160,8 @@ class xmlmagic{
 	//OBTIENE UN VALOR DEL NODO QUE SE LE INDIQUE
 	function getValNode_dif($node){
 		$clase=$this->nmclass;
-		$valor=$this->nodos[$clase][$node];
-
+		$valor=$this->nodos[$clase][$node]; 
+		
 		if($valor!=''){
 			return $valor;
 		}
@@ -235,7 +220,7 @@ class xmlmagic{
 		$claseppal=$this->getMainNode();
 		//imprimir la clase ppal
 		$cant_clases=$this->cant_clases;
-
+		
 		$enctype=$this->encodetext;
 		if($enctype!=''){
 			$this->estrucxml="<?xml version='1.0' encoding='".$enctype."'?>\n";
@@ -243,7 +228,7 @@ class xmlmagic{
 		else{
 			$this->estrucxml="<?xml version='1.0' encoding='utf-8'?>\n";
 		}
-
+		
 		$this->estrucxml.="<".$claseppal.">\n";
 		foreach ($this->clases[$claseppal] as $llave=>$valor) {
 			$this->estrucxml.="\t<".$valor.">\n";
@@ -267,7 +252,7 @@ class xmlmagic{
 	function setEncoding($encode){
 		$this->encodetext=$encode;
 	}
-
+	
 	function getEncoding(){
 		if($this->encodetext!=''){
 			return $this->encodetext;
@@ -280,7 +265,7 @@ class xmlmagic{
 	function setCodeStat($encode){
 		$this->encodestat=$encode;
 	}
-
+	
 	function getCodeStat(){
 		if($this->encodestat!=''){
 			return $this->encodestat;
@@ -297,27 +282,27 @@ class xmlmagic{
 		else{
 			$this->setCodeStat("<?xml version='1.0' encoding='utf-8' ?>\n");
 		}
-
+		
 		return 0;
 	}
-
+	
 	//DEVUELVE UN ARRAY CON LA ESRUCTURA XML
 	function arrGetStructClass(){
 		//Armar la escrutctura del XML
 		$claseppal=$this->getMainNode();
 		//imprimir la clase ppal
 		$cant_clases=$this->cant_clases;
-
+		
 		foreach ($this->clases[$claseppal] as $llave=>$valor) {
 			$this->estrucxml_arr[]="\t<".$valor.">\n";
 				foreach ($this->nodos[$valor] as $key=>$value) {
-					if($this->perte[$key]==$valor){
+					if($this->perte[$key]==$valor){			
 					    $this->estrucxml_arr[]="\t\t<".$key.">".$value."</".$key.">\n";
 					}
 				}
 			$this->estrucxml_arr[]="\t</".$valor.">\n";
 		}
-
+		
 		//$directorio
 		if($this->estrucxml_arr!=''){
 			return $this->estrucxml_arr;
@@ -336,7 +321,7 @@ class xmlmagic{
 		foreach ($this->clases[$claseppal] as $llave=>$valor) {
 			$this->estrucxml_arr[]="\t<".$valor.">\n";
 				foreach ($this->nodos[$valor] as $key=>$value) {
-					if($this->perte[$key]==$valor){
+					if($this->perte[$key]==$valor){			
 					    $this->estrucxml_arr[]="\t\t<".$key.">".$value."</".$key.">\n";
 					}
 				}
@@ -357,16 +342,16 @@ class xmlmagic{
 		$cant_clases=$this->cant_clases;
 		$claseppaltext="<".$claseppal.">\n";
 		$claseppaltextc="</".$claseppal.">\n";
-
+		
 		//Armar la escrutctura del XML
 		$claseppal=$this->getMainNode();
 		//imprimir la clase ppal
 		$cant_clases=$this->cant_clases;
-
+		
 		foreach ($this->clases[$claseppal] as $llave=>$valor) {
 			$this->estrucxml_arr[]="\t<".$valor.">\n";
 				foreach ($this->nodos[$valor] as $key=>$value) {
-					if($this->perte[$key]==$valor){
+					if($this->perte[$key]==$valor){			
 					    $this->estrucxml_arr[]="\t\t<".$key.">".$value."</".$key.">\n";
 					}
 				}
@@ -378,13 +363,13 @@ class xmlmagic{
 			$dirfile=$this->xmldir;
 			$clasppal=$this->getMainNode();
 			$contenido=$this->estrucxml_arr;
-
+			
 			if($contenido!='' && $dirfile!=''){
 				if($option=='c'){
 					$this->etiqcier='c';
 					file_put_contents($dirfile, $contenido, FILE_APPEND| LOCK_EX);
 					file_put_contents($dirfile, $claseppaltextc, FILE_APPEND| LOCK_EX);
-				}
+				}		
 				if($option=='u'){
 					file_put_contents($dirfile, $contenido, FILE_APPEND| LOCK_EX);
 				}
@@ -415,16 +400,16 @@ class xmlmagic{
 			}
 			else{
 				return -1;
-			}
+			}		
 		}
 		$this->vaciarXML();
-	}
+	}	
 	//Codifica una cadena a MD5
 	function XMLEncStrMD5($cadena){
 		$this->mdcstr=md5($cadena);
-		return $this->mdcstr;
+		return $this->mdcstr; 
 	}
-
+	
 	function vaciarXML(){
 		$this->valores=array();
 		$this->clases=array();
@@ -494,8 +479,8 @@ class xmlmagic{
 						if($palabras[1][0]!=''){
 							$coinc[$i]=$palabras[1][0];
 							$i++;
-						}
-					}
+						}					
+					}				
 				}
 			}
 			fclose($archivo);
@@ -541,8 +526,8 @@ class xmlmagic{
 						if($palabras[1][0]!=''){
 							$coinc[$i]=$palabras[1][0];
 							$i++;
-						}
-					}
+						}					
+					}				
 				}
 			}
 			fclose($archivo);
@@ -588,8 +573,8 @@ class xmlmagic{
 						if($palabras[1][0]!=''){
 							$coinc[$i]=$palabras[1][0];
 							$i++;
-						}
-					}
+						}					
+					}				
 				}
 			}
 			fclose($archivo);
@@ -599,7 +584,7 @@ class xmlmagic{
 				return $string;
 			}
 			else{
-				return $coinc;
+				return $coinc;			
 			}
 		}
 	}
@@ -628,7 +613,7 @@ class xmlmagic{
 					if($palabras[1][0]!=''){
 						$coinc[$i]=$palabras[1][0];
 						$i++;
-					}
+					}				
 				}
 			}
 			fclose($archivo);
@@ -666,7 +651,7 @@ class xmlmagic{
 					$i++;
 				}
 			}
-
+			
 			$u=count($archxml);
 			for($i=0;$i<=($u-1);$i++){
 				$modelo="/<".$etiqueta."[^>]*>(.*?)<\/".$etiqueta.">/";
@@ -680,12 +665,13 @@ class xmlmagic{
 					$archxml[$i]=$rep;
 				}
 			}
-
+			
 			file_put_contents($nombrearch,$archxml);
 			fclose($archivo);
 			return 0;
 		}
 	}
+	
 	function AppendData($arbol){
 		$archivo_arr=array();
 		$brakeline='';
@@ -695,13 +681,13 @@ class xmlmagic{
 			if(file_exists($directorio)){
 				if($fpuntero=fopen($directorio, "r")){
 					while(!feof($fpuntero)){
-					    //read file line by line into a new array element
+					    //read file line by line into a new array element 
 					    $archivo_arr[]=fgets($fpuntero, 4096);
 					    $i++;
 					}
 				}
 				fclose($fpuntero);
-
+				
 				if($fpuntero=fopen($directorio, "a")){
 					fwrite($fpuntero,"\n");
 					fwrite($fpuntero,$arbol);
@@ -717,6 +703,7 @@ class xmlmagic{
 			return -1;
 		}
 	}
+	
 	function CreateXML($directorio,$contenido){
 		if(!file_exists($directorio)){
 			$archivo=fopen($directorio,"w+");
@@ -725,16 +712,17 @@ class xmlmagic{
 				fwrite($archivo,$this->getCodeStat());
 				fwrite($archivo,$contenido);
 				fclose($archivo);
-				return 0;
+				return 0; 
 			}
 			else{
 				return -1;
-			}
+			}			
 		}
 		else{
 			return -2;
 		}
 	}
+
 	function CreatePHP($directorio,$contenido){
 		if(!file_exists($directorio)){
 			$archivo=fopen($directorio,"w+");
@@ -747,16 +735,17 @@ class xmlmagic{
 				fwrite($archivo,$contenido);
 				fwrite($archivo,$pie);
 				fclose($archivo);
-				return 0;
+				return 0; 
 			}
 			else{
 				return -1;
-			}
+			}			
 		}
 		else{
 			return -2;
 		}
 	}
+
 	function CreatePHPConfig($directorio,$opcion){
 		if($opcion=='u'){
 				$archivo=fopen($directorio,"w");
@@ -772,11 +761,11 @@ class xmlmagic{
 					$pie="?>\n";
 					fwrite($archivo,$pie);
 					fclose($archivo);
-					return 0;
+					return 0; 
 				}
 				else{
 					return -1;
-				}
+				}		
 		}
 		else{
 			if(!file_exists($directorio)){
@@ -793,33 +782,35 @@ class xmlmagic{
 					$pie="?>\n";
 					fwrite($archivo,$pie);
 					fclose($archivo);
-					return 0;
+					return 0; 
 				}
 				else{
 					return -1;
-				}
+				}			
 			}
 			else{
 				return -2;
 			}
 		}
 	}
+	
 	function CreateCSS($directorio,$contenido){
 		if(!file_exists($directorio)){
 			$archivo=fopen($directorio,"w+");
 			if($archivo){
 				fwrite($archivo,$contenido);
 				fclose($archivo);
-				return 0;
+				return 0; 
 			}
 			else{
 				return -1;
-			}
+			}			
 		}
 		else{
 			return -2;
 		}
 	}
+		
 	function LabelToDefineArray($etiqueta,$def){
 		$nombre=$this->getElementByTagName($etiqueta);
 		$n=count($nombre);
@@ -832,11 +823,13 @@ class xmlmagic{
 			return $str_PHP;
 		}
 	}
+
 	function LabelToDefineStr($valor,$def){
 		$str_PHP="define('".$def."','".$valor."');";
 		$this->archivoconf[]=$str_PHP;
 		return $str_PHP;
 	}
+	
 	function setTreeConfig(){
 		$valor=array();$item=array();
 		/*diferenciar el lado derecho del lado izq porque el lado izquiero esta en mayusculas
@@ -859,10 +852,10 @@ class xmlmagic{
 				}
 				elseif($str2==$str1 && $numeco[0]!=''){
 					$valor[]=$argu[$i];
-				}
+				}				
 				else{
 					if($str2!=$str1){
-						$valor[]=$argu[$i];
+						$valor[]=$argu[$i];	
 					}
 				}
 			}
@@ -888,14 +881,14 @@ class xmlmagic{
 			return -1;
 		}
 	}
-
+	
 	// Abre un directorio conocido, y procede a leer el contenido
 	function AnalizeDir(){
 		$directorio=$this->getNameXML();
 		$i=0;
 		$archivosnom='';
 		if (is_dir($directorio)) {
-		    if ($dh = opendir($directorio)) {
+		    if ($dh = opendir($directorio)) { 	
 		        while (($file = readdir($dh)) !== false) {
 					if($file!='.' || $file!='..' || $file!='...'){
 						$archivosnom[$i]=$file;
@@ -909,15 +902,15 @@ class xmlmagic{
 			die("El directorio no existe");
 		}
 		return $archivosnom;
-	}
-
+	} 
+	
 	function ListFileMulti(){
 		$directorio=$this->getNameXML();
 		if($directorio!=''){
 			$i=0;
 			$narchivos=0;
 			if (is_dir($directorio)) {
-			    if ($dh = opendir($directorio)) {
+			    if ($dh = opendir($directorio)) { 	
 			        while (($file = readdir($dh)) !== false) {
 						$narchivos++;
 			        }
@@ -932,8 +925,8 @@ class xmlmagic{
 		else{
 			return -1;
 		}
-	}
-
+	} 
+	
 	function ListFileSingle(){
 		$directorio=$this->getNameXML();
 		if($directorio!=''){
@@ -949,7 +942,7 @@ class xmlmagic{
 			            $i++;
 			        }
 			        closedir($dh);
-			        return 0;
+			        return 0; 
 			    }
 			}
 		}
@@ -957,9 +950,9 @@ class xmlmagic{
 			return -1;
 		}
 	}
-
+	
 	function setModuloDir($direc){
-		//setear el directorio de donde se va a hacer el menu
+		//setear el directorio de donde se va a hacer el menu 
 		if(is_dir($direc)){
 			$this->menudir=$direc;
 			return 0;
@@ -968,6 +961,7 @@ class xmlmagic{
 			return -1;
 		}
 	}
+	
 	function getModuloDir(){
 	//obtener el directorio de donde se va a hacer el menu
 		if($this->menudir!=''){
@@ -977,6 +971,28 @@ class xmlmagic{
 			return -1;
 		}
 	}
+
+	function setMenuDir($direc){
+		//setear el directorio de donde se va a hacer el menu 
+		if(is_dir($direc)){
+			$this->menuhtmldir=$direc;
+			return 0;
+		}
+		else{
+			return -1;
+		}
+	}
+
+	function getMenuDir(){
+	//obtener el directorio de donde se va a hacer el menu
+		if($this->menuhtmldir!=''){
+			return $this->menuhtmldir;
+		}
+		else{
+			return -1;
+		}
+	}
+	
 	function VerModulos(){
 		$coinc=array();
 		$modulos=array();
@@ -986,13 +1002,15 @@ class xmlmagic{
 			$directotal=$directorio.'modulosall_actual.xml';
 			$this->setNameXML($directotal);
 			$res=$this->getElementByTagName('numero_modulos');
-			return $res;
-		}
+			return $res; 
+		}	
 	}
+	
+	
 	function ActualizarModulos(){
-		//Función que actualiza el archivo que lista los módulos que exisdten en el sistema
 		$coinc=array();
 		$modulos=array();
+		//si opcion=0 entonces es simple, si opcion=1 entonces es un menu completo con niveles
 		$directorio=$this->getModuloDir();
 		if($directorio!=''){
 			$i=0;
@@ -1025,7 +1043,7 @@ class xmlmagic{
 				        	if($i==($narchivos-1)){
 				        		$myclas->setSubNode($cadena,$modulos[$i],'u');
 				        	}
-				        	else{
+				        	else{	
 								$myclas->setSubNode($cadena,$modulos[$i]);
 				        	}
 				        }
@@ -1051,6 +1069,543 @@ class xmlmagic{
 			return -4;
 		}
 	}
+
+	function setColorMenu($color,$seccion){
+		//establece color para ciertas areas del menu
+		
+		if($seccion=='link_cabecera'){
+			$this->lcabecera=$color;
+		}
+		elseif($seccion=='hover_cabecera'){
+			$this->hcabecera=$color;
+		}
+		elseif($seccion=='link_menu'){
+			$this->lmenu=$color;
+		}
+		elseif($seccion=='hover_menu'){
+			$this->hmenu=$color;
+		}
+		elseif($seccion=='fore_cabecera'){
+			$this->forecabecera=$color;
+		}
+		elseif($seccion=='fore_menu'){
+			$this->foremenu=$color;
+		}
+		else{
+			//normal (el gris ese soso)
+			$this->nmenu=$color;
+		}
+	}
+	
+	function printCSSMenu(){
+		if($this->lcabecera==''){
+			$this->lcabecera='710069';
+		}
+		
+		if($this->hcabecera==''){
+			$this->hcabecera='36f';
+		}
+		
+		if($this->lmenu==''){
+			$this->lmenu='6a3';
+		}
+		
+		if($this->hmenu==''){
+			$this->hmenu='6fc';
+		}
+		
+		if($this->nmenu==''){
+			$this->nmenu='ddd';
+		}
+		
+		if($this->forecabecera==''){
+			$this->forecabecera='fff';
+		}
+		
+		if($this->foremenu==''){
+			$this->foremenu='fff';
+		}
+		$cadena="<style type=\"text/css\">
+		/* ================================================================ 
+		This copyright notice must be untouched at all times.
+		
+		The original version of this stylesheet and the associated (x)html
+		is available at http://www.cssplay.co.uk/menus/dd_valid.html
+		Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+		This stylesheet and the assocaited (x)html may be modified in any 
+		way to fit your requirements.
+		=================================================================== */
+		/* common styling */
+		.menu {font-family: arial, sans-serif; width:800px; height:150px; position:relative; font-size:15px; z-index:100;}
+		.menu ul li a, .menu ul li a:visited {display:block; text-decoration:none; color:#000;width:107px; height:30px; text-align:center; color:#".$this->forecabecera."; border:1px solid #fff; background:#".$this->lcabecera."; line-height:30px; font-size:15px; overflow:hidden;}
+		.menu ul {padding:0; margin:0; list-style: none;}
+		.menu ul li {float:left; position:relative;}
+		.menu ul li ul {display: none;}
+		
+		/* specific to non IE browsers */
+		.menu ul li:hover a {color:#fff; background:#".$this->hcabecera.";}
+		.menu ul li:hover ul {display:block; position:absolute; top:31px; left:0; width:auto;}
+		.menu ul li:hover ul li a.hide {background:#".$this->lmenu."; color:#".$this->foremenu.";}
+		.menu ul li:hover ul li:hover a.hide {background:#".$this->hmenu."; color:#000;}
+		.menu ul li:hover ul li ul {display: none;}
+		.menu ul li:hover ul li a {display:block; background:#".$this->nmenu."; color:#000;}
+		.menu ul li:hover ul li a:hover {background:#".$this->hmenu."; color:#000;}
+		.menu ul li:hover ul li:hover ul {display:block; position:absolute; left:108px; top:0;}
+		.menu ul li:hover ul li:hover ul.left {left:-105px;}
+		</style>";
+		echo($cadena);
+		return 0;
+	}
+	
+	function CrearCSSMenu(){
+		//nombre del archivo cssmenu.css
+		if(!is_dir('css_menu/')){
+			mkdir('css_menu');
+			if(!file_exists('css_menu/estilo.css')){
+				$archivo=fopen('css_menu/estilo.css','w');
+				if($archivo){
+					$cadena="/* ================================================================ 
+					This copyright notice must be untouched at all times.
+					
+					The original version of this stylesheet and the associated (x)html
+					is available at http://www.cssplay.co.uk/menus/dd_valid.html
+					Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+					This stylesheet and the assocaited (x)html may be modified in any 
+					way to fit your requirements.
+					=================================================================== */
+					/* common styling */
+					.menu {font-family: arial, sans-serif; width:800px; height:150px; position:relative; font-size:15px; z-index:100;}
+					.menu ul li a, .menu ul li a:visited {display:block; text-decoration:none; color:#000;width:104px; height:30px; text-align:center; color:#".$this->forecabecera."; border:1px solid #fff; background:#".$this->lcabecera."; line-height:30px; font-size:15px; overflow:hidden;}
+					.menu ul {padding:0; margin:0; list-style: none;}
+					.menu ul li {float:left; position:relative;}
+					.menu ul li ul {display: none;}
+					
+					/* specific to non IE browsers */
+					.menu ul li:hover a {color:#fff; background:#".$this->hcabecera.";}
+					.menu ul li:hover ul {display:block; position:absolute; top:31px; left:0; width:auto;}
+					.menu ul li:hover ul li a.hide {background:#".$this->lmenu."; color:#".$this->foremenu.";}
+					.menu ul li:hover ul li:hover a.hide {background:#".$this->hmenu."; color:#000;}
+					.menu ul li:hover ul li ul {display: none;}
+					.menu ul li:hover ul li a {display:block; background:#".$this->nmenu."; color:#000;}
+					.menu ul li:hover ul li a:hover {background:#".$this->hmenu."; color:#000;}
+					.menu ul li:hover ul li:hover ul {display:block; position:absolute; left:105px; top:0;}
+					.menu ul li:hover ul li:hover ul.left {left:-105px;}";
+					fwrite($cadena,$archivo);
+					fclose($archivo);
+					return 0;
+				}
+				else{
+					return -1;
+				}
+			}
+		}
+		
+	}
+	function RenderMenuSimple(){
+		$coinc=array();
+		$divis=array();
+		$directorio=$this->getModuloDir();
+		if($directorio!=''){
+		//Contar los archivos que hay en el direcotrio especificado
+		//colocar un ultimo caracter que defina si el archivo va al menu o no
+			$directorio_dos = opendir($directorio);
+			$modelo='/^[A-Za-z0-9_-]{0,64}_[A-Za-z0-9_-]{0,64}_[a-z]{1}.php/';
+			$numarchivos=0;
+			while ($archivo = readdir($directorio_dos)){
+				if($archivo!='.' || $archivo!='..'){
+					if(preg_match_all($modelo,$archivo,$coinc)){
+						$numarchivos++;
+					}
+				}
+			}
+			//crear el menu :):):):):-P
+			$directorio_dos = opendir($directorio);
+			echo('<table style=\"width:800px;height:40px;\">');
+				echo('<tr>');
+			$i=0;
+			while ($archivo = readdir($directorio_dos)){
+				if(preg_match_all($modelo,$archivo,$coinc)){
+					echo('<td>');
+					$divis=explode('_',$coinc[0][0]);
+					$divdos=explode('.',$divis[2]);
+					$cadena=$divis[0];
+					$id=$divis[2];
+					if($divdos[0]=='m'){
+						$cadena=str_replace('-', ' ', $cadena);
+						$cadena=ucwords($cadena);
+						echo("<a href='".$divis[1]."'>".$cadena."</a>");
+						echo('</td>');
+						if($i<($numarchivos-1)){
+							echo('<td style=\"width:40px;\">|</td>');
+						}
+					}
+					$i++;
+				}
+			}
+				echo('</tr>');
+			echo('</table>');
+		}
+		else{
+			return -1;
+		}
+	}
+	function setParentMenu($menu,$nivel){
+		//establece un menu padre
+		if($menu!='' && $nivel!=''){
+			$nivel=0;
+			$menu=str_replace(' ','_',$menu);
+			$this->menu_padre[$this->index_menu]=$menu;
+			$this->niveles[$this->menu_padre[$this->index_menu]]=$nivel;
+			$this->index_menu++;
+			$this->lastmenu=$menu;
+			return 0;		
+		}
+		
+		else{
+			return -1;
+		}
+	}
+	
+	function getLastParentMenu(){
+		//devuelve una cadena del ultimo menu parent que se introdujo
+		if($this->lastmenu!=''){
+			return $this->lastmenu;
+		}
+		else{
+			return -1;
+		}
+	}
+	
+	function seekParentMenu($menu){
+		/**busca si el menu existe, devuelve 0 si el procedimiento es exitoso -2 si no lo es y 
+		-1 si esta vacia la variable**/
+		if(count($this->menu_padre)>0){
+			for($i=0;$i<=(count($this->menu_padre)-1);$i++){
+				if($this->menu_padre[$i]==$menu){
+					$parent=$this->menu_padre[$i];
+					return 0;
+				}
+			}
+			return -2;
+		}
+		else{
+			return -1;
+		}
+	}
+	function showMenuPadre(){
+		if(count($this->menu_padre)>0){
+			for($i=0;$i<=(count($this->menu_padre)-1);$i++){
+				$parent=$this->menu_padre[$i];
+				echo($i.". ".$parent.', NIVEL: '.$this->niveles[$this->menu_padre[$i]].'<br>');
+			}
+		}
+	}
+	function seekChildParent(){
+			/**busca si el menu existe, devuelve 0 si el procedimiento es exitoso -2 si no lo es y 
+		-1 si esta vacia la variable**/
+		if(count($this->menu_padre)>0){
+			for($i=0;$i<=(count($this->submenu_padre)-1);$i++){
+				if($this->submenu_padre[$i]==$menu){
+					$child=$this->submenu_padre[$i];
+					return 0;
+				}
+			}
+			return -2;
+		}
+		else{
+			return -1;
+		}	
+	}
+	function MenuAppendChild($menupadre,$menuhijo,$enlacemhijo){
+		//relaciona el menu con el menu padre y su correspondiente enlace a otro lugar...
+		if($this->seekParentMenu($menupadre)==0){
+			if($menupadre!='' && $menuhijo!='' && $enlacemhijo!=''){
+				$nivel=1;
+				$enlacemhijo=str_replace(' ','_',$enlacemhijo);
+				$menupadre=str_replace(' ','_',$menupadre);
+				$menuhijo=str_replace(' ','_',$menuhijo);
+				$this->niveles[$menupadre]=$nivel;
+				$this->submenu_padre[$menupadre][$this->index_submenu]=$menuhijo;
+				$this->linksubmenu_padre[$menupadre][$this->index_submenu]=$enlacemhijo;
+				$this->index_submenu++;
+				$this->index_linksubmenu++;
+			}
+		}
+		else{
+			return -1;
+		}
+	}
+	function RenderXMLMenu(){
+		/*
+		 * escribir las directivas XMl del menu en los archivos 
+		correspondientes para despues ser renderizados en HTML
+		con la funcion RenderHTMLMenu();
+		*/
+	
+		//crea el archivo de los menus padre
+		$myclasqq= new xmlclass();
+		$myclasqq->XMLDocNew('menus_padre.xml');
+		$myclasqq->MkMainNode('sistema');
+		
+		for($i=0;$i<=(count($this->menu_padre)-1);$i++){
+			$y=0;
+			$q=0;
+			//u= indica que es la ultima etiqueta de la clase
+			//uf=indica que es la ultima clase
+			$str='menu_'.strtolower($this->menu_padre[$i]);
+			$myclasqq->setClase($str);	
+			$myclasqq->setSubNode(strtolower($this->menu_padre[$i]).'_nombre',strtolower($this->menu_padre[$i]));
+			$x=0;
+			foreach($this->submenu_padre[$this->menu_padre[$i]] as $key=>$value){
+				if($this->seekParentMenu($value)!=0){
+					$cadenasm=strtolower($this->menu_padre[$i]).'_menuoption_'.$y;
+					$y++;				
+				}
+				else{
+					$cadenasm=strtolower($this->menu_padre[$i]).'_menuchild_'.$q;
+					$q++;				
+				}
+				//nombre del menu - enlace del menu
+				$cadenanombre=strtolower($value).'-'.strtolower($this->linksubmenu_padre[$this->menu_padre[$i]][$key]);
+				$myclasqq->setSubNode($cadenasm,$cadenanombre);
+				$x++;
+			}
+			if($this->seekParentMenu($this->menu_padre[$i])==0 && $x!=0){
+				$myclasqq->setSubNode(strtolower($this->menu_padre[$i]).'_numero_submenus',$x);
+			}
+			else{
+				$myclasqq->setSubNode(strtolower($this->menu_padre[$i]).'_numero_submenus',$x);
+			}
+			$myclasqq->setSubNode(strtolower($this->menu_padre[$i]).'_nivel_menu',$this->getNivelMenu($this->menu_padre[$i]),'u');
+		}
+		
+		$numeros=count($this->menu_padre);
+		$myclasqq->setClase('Informacion_general');
+		//Crear la estructura XML y escribir al archivo
+		$myclasqq->setSubNode('menu_numero_modulos',$numeros,'uf');
+	}
+	function getNivelMenu($menu){
+		return $this->niveles[$menu];
+	}
+	function setNameMenuFile($file){
+		$this->namefilemenu=$file;
+		return 0;
+	}
+	function getNameMenuFile(){
+		return $this->namefilemenu;
+	}
+	function RenderMenu(){
+		$get=$this->getNameMenuFile();
+		if($get!=''){
+			if(file_exists($get)){
+				$this->RenderXMLMenu();
+				$this->RenderHTMLMenu();
+				return 0;
+			}
+			else{
+				return -2;
+			}
+		}
+		else{
+			return -1;
+		}
+	}
+	function RenderMenuFile($get){
+		if($get!=''){
+			if(file_exists($get)){
+				$this->RenderXMLMenu();
+				$this->RenderHTMLMenu();
+				return 0;
+			}
+			else{
+				return -2;
+			}
+		}
+		else{
+			return -1;
+		}
+	}
+	function RenderHTMLMenu(){
+		//renderizar el menu XML en HTML
+		$this->printCSSMenu();
+		$get=$this->getNameMenuFile();
+		if(file_exists($get)){
+			$this->setNameXML($get);
+			
+			$hcoinc=$this->getElementByTagName('menu_[a-z]{1,50}');
+			
+			for($i=0;$i<=(count($hcoinc)-1);$i++){
+				$aux=explode('_',$hcoinc[$i]);
+				$menuaux[]=$aux[1];
+				$menul[]=$aux[1];
+			}
+			
+			//buscar los menu que no son de nivel 0
+			$encontrado=0;
+			$l=0;
+			$n=0;
+			for($i=0;$i<=(count($hcoinc)-1);$i++){
+				$cadena=$menul[$i].'_menuchild_[0-9]{1,5}';
+				$conci=$this->getElementByTagName($cadena);
+				if(count($conci)>0 && count($conci)<2){
+					$auxme=explode('-',$conci);
+					$this->childs[$n]=$auxme[0];
+					$n++;
+				}
+				else{
+					for($j=0,$x=$n;$j<=(count($conci)-1),$x<=(count($conci)+$n-1);$j++,$x++){
+						$auxme=explode('-',$conci[$j]);
+						$this->childs[$x]=$auxme[0];
+					}
+				}
+			}
+			//pasar los menus que son de nivel 0 (nivel superior)
+			$l=0;
+			$e=-2;
+			for($i=0;$i<=(count($hcoinc)-1);$i++){
+				$menupa=$menul[$i];
+				for($j=0;$j<=(count($this->childs)-1);$j++){
+					if($this->childs[$j]==$menupa){
+						$e=1;
+					}
+				}
+				
+				if($e==-2){
+					$menufinal[$l]=$menul[$i];
+					$l++;
+				}
+				$e=-2;
+			}
+			//crear el menu HTML
+			?>
+			<div class="menu">
+			<ul>
+			<?php
+			for($i=0;$i<=(count($menufinal)-1);$i++){
+				$nombremenu=$menufinal[$i];
+				$nombremenucs=str_replace('_',' ',$nombremenu);
+				echo("<li><a class=\"hide\">".ucwords($nombremenucs)."</a>");
+				?>
+				<!--[if lte IE 6]>
+				<a href=\"#\">DEMOS
+				<table><tr><td>
+				<![endif]-->
+				<ul>
+				<?php
+				
+				$cadena=$nombremenu.'_menuchild[a-z_]{1,50}[0-9]{1,5}';
+				$icoinc=$this->getElementByTagName($cadena);
+				if(count($icoinc)>0){
+					for($j=0;$j<=(count($icoinc)-1);$j++){
+						$enlace=$nombremenu.'_menuchild_'.$j;
+						$links[]=$this->getElementByTagName($enlace);
+					}
+					
+					for($f=0;$f<=(count($links)-1);$f++){
+						$variop=explode('-',$links[$f]);
+						$menun='menu_'.$variop[0];
+						$cadena=$variop[0].'_menuoption_[0-9]{1,5}';
+						$ncoinc=$this->getElementByTagName($cadena);
+							$auxmenu=$variop[0];
+							$auxmenu=str_replace('_',' ',$auxmenu);
+							echo("<li><a class=\"hide\" href='?m=".$variop[0]."' >".ucwords($auxmenu)."></a>")
+							?>
+						    <!--[if lte IE 6]>
+						    <a class="sub" href="../menu/hover_click.html" title="Hover/click with no active/focus borders">HOVER/CLICK &gt;
+						    <table><tr><td>
+						    <![endif]-->
+						
+							<ul>
+							<?php
+							if(count($ncoinc)>0){
+								if(count($ncoinc)>0 && count($ncoinc)<2){
+									$varios=explode('-',$ncoinc);
+									$auxmenu=$varios[0];
+									$auxmenu=str_replace('_',' ',$auxmenu);
+									echo("<li><a href='?m=".$varios[1]."'>".$auxmenu."</a></li>");
+								}
+								else{
+									$linksb=array();
+									for($j=0;$j<=(count($ncoinc)-1);$j++){
+										$enlace=$variop[0].'_menuoption_'.$j;
+										$linksb[]=$this->getElementByTagName($enlace);
+									}
+									
+									for($k=0;$k<=(count($linksb)-1);$k++){
+										$variop=explode('-',$linksb[$k]);
+										$auxmenu=$variop[0];
+										$auxmenu=str_replace('_',' ',$auxmenu);
+										$auxmenu=ucwords($auxmenu);
+										echo("<li><a href=\"?m=$variop[1]\">{$auxmenu}</a></li>");
+									}
+									$linksb=array();
+									$ncoinc=array();
+									$icoinc=array();
+								}
+							}
+					?>
+						</ul>
+					<!--[if lte IE 6]>
+					</td></tr></table>
+				    </a>
+				    <![endif]-->
+					<?php
+					}
+					$links=array();
+				}
+
+				$cadena=$nombremenu.'_menuoption_[a-z_]{0,50}[0-9]{1,5}';
+				$vcoinc=$this->getElementByTagName($cadena);
+				if(count($vcoinc)>0){
+					if(count($vcoinc)>0 && count($vcoinc)<2){
+						$varios=explode('-',$vcoinc);
+						$auxmenu=$varios[0];
+						$auxmenu=str_replace('_',' ',$auxmenu);
+						$auxmenu=ucwords($auxmenu);
+						echo("<li><a href='?m=".$varios[1]."'>".$auxmenu."</a></li>");
+					}
+					else{
+						for($j=0;$j<=(count($vcoinc)-1);$j++){
+							$enlace=$nombremenu.'_menuoption_'.$j;
+							$linksb[]=$this->getElementByTagName($enlace);
+						}
+						
+						for($k=0;$k<=(count($linksb)-1);$k++){
+							$variop=explode('-',$linksb[$k]);
+							$auxmenu=$variop[0];
+							$auxmenu=str_replace('_',' ',$auxmenu);
+							$auxmenu=ucwords($auxmenu);
+							echo("<li><a href=\"?m=$variop[1]\">{$auxmenu}</a></li>");
+						}
+						$linksb=array();
+						$ncoinc=array();
+						$icoinc=array();
+					}
+				}
+			?>
+		    <!--[if lte IE 6]>
+		    <a class=\"sub\" href=\"../menu/hover_click.html\" title=\"Hover/click with no active/focus borders\">HOVER/CLICK &gt;
+		    <table><tr><td>
+		    <![endif]-->
+			<!--[if lte IE 6]>
+			</td>
+			</tr>
+			</table>
+		    </a>
+		    <![endif]-->
+		
+			</li>
+			</ul>
+			<?php
+			}
+			?>
+			</ul>	
+		</div>
+		<?php
+			return 0;
+		}
+	}
+	
 	function getIntoFolder($menu){
 		$coinc=array();
 		$divis=array();
@@ -1093,7 +1648,7 @@ class xmlmagic{
 		}
 		else{
 			return -1;
-		}
+		}	
 	}
 }
 ?>
