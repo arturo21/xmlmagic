@@ -1,3 +1,3 @@
 # XMLMAGIC
 
-PHP framework to handle XML files with a intuitive API
+PHP framework to handle XML files with an intuitive API
