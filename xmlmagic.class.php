@@ -558,6 +558,13 @@ class xmlmagic{
 	}
 	function getElementsByTagName($etiqueta){
 		$coinc=array();
+		//obtener numero de argumentos
+	    $numargs = func_num_args();
+	    $argulist = func_get_args();
+		$indice_array_=0;
+		if($numargs>1){
+			$indice_array_=$argulist[1];
+		}
 		$nombrearch=$this->getNameXML();
 		if(!($archivo = fopen($nombrearch,"r"))){
 	   		return -1;
@@ -599,7 +606,15 @@ class xmlmagic{
 				return $string;
 			}
 			else{
-				return $coinc;
+				if($indice_array_>0){
+					if($indice_array_<=count($coinc)){
+						return $coinc[$indice_array_];						
+					}
+				}
+				else{
+					$string=$coinc[0];
+					return $string;
+				}
 			}
 		}
 	}
@@ -689,11 +704,13 @@ class xmlmagic{
 	function AppendData($arbol){
 		$archivo_arr=array();
 		$brakeline='';
+		$count_file=0;
+		$cadena="";
 		$i=0;
 		$archivo=$this->getNameXML();
 		if($archivo!='' && $arbol!=''){
-			if(file_exists($directorio)){
-				if($fpuntero=fopen($directorio, "r")){
+			if(file_exists($archivo)){
+				if($fpuntero=fopen($archivo, "r")){
 					while(!feof($fpuntero)){
 					    //read file line by line into a new array element
 					    $archivo_arr[]=fgets($fpuntero, 4096);
@@ -701,11 +718,14 @@ class xmlmagic{
 					}
 				}
 				fclose($fpuntero);
-
-				if($fpuntero=fopen($directorio, "a")){
-					fwrite($fpuntero,"\n");
+				$count_file=count($archivo_arr);
+				$archivo_arr[($count_file-1)]="";
+				if($fpuntero=fopen($archivo, "w")){
+					file_put_contents($archivo, $archivo_arr);
+				}
+				fclose($fpuntero);
+				if($fpuntero=fopen($archivo, "a")){
 					fwrite($fpuntero,$arbol);
-					fwrite($fpuntero,"\n");
 				}
 				fclose($fpuntero);
 			}
@@ -715,6 +735,22 @@ class xmlmagic{
 		}
 		else{
 			return -1;
+		}
+	}
+	function CreateFile($directorio,$contenido){
+		if(!file_exists($directorio)){
+			$archivo=fopen($directorio,"w+");
+			if($archivo){
+				fwrite($archivo,$contenido);
+				fclose($archivo);
+				return 0;
+			}
+			else{
+				return -1;
+			}
+		}
+		else{
+			return -2;
 		}
 	}
 	function CreateXML($directorio,$contenido){
@@ -1095,5 +1131,23 @@ class xmlmagic{
 			return -1;
 		}
 	}
+	public function sanitize_identity($cadena){
+        return str_replace(array("á","é","í","ó","ú","ñ","Á","É","Í","Ó","Ú","Ñ"),array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;","&ntilde;","&Aacute;","&Eacute;","&Iacute;","&Oacute;","&Uacute;","&Ntilde;"), $cadena);
+    }
+	public function sanitize_tags($cadena){
+        return strip_tags($cadena);
+    }
+	public function sanitize_slashes($cadena){
+        return stripslashes(stripslashes($cadena));
+    }
+	public function sanitize_whitespace($cadena){
+        return php_strip_whitespace($cadena);
+    }
+	public function sanitize($cadena){
+        return $this->sanitize_tags($this->sanitize_slashes($this->sanitize_identity($cadena)));
+    }
+	public function space2lines($cadena){
+        return str_replace(" ", "-", $cadena);
+    }
 }
 ?>
